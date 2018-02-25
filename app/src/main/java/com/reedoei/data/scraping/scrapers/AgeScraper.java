@@ -12,12 +12,16 @@ import java.util.regex.Pattern;
  * Created by roei on 2/24/18.
  */
 
-public class AgeScraper implements Scraper<Integer> {
+public class AgeScraper extends AbstractScraper<Integer> {
     private static final Pattern agePattern = Pattern.compile("([0-9]+)");
+
+    public AgeScraper(List<String> keywords) {
+        super(keywords);
+    }
 
     @Override
     public double getScore(final String text) {
-        double total = 0;
+        double total = getKeywordScore(text);
 
         if (text.toLowerCase().contains("age")) {
             total += 1;

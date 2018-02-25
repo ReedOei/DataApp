@@ -4,7 +4,6 @@ import android.support.annotation.NonNull;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -12,14 +11,18 @@ import java.util.regex.Pattern;
  * Created by roei on 2/24/18.
  */
 
-public class PhoneNumberScraper implements Scraper<String> {
+public class PhoneNumberScraper extends AbstractScraper<String> {
     private static final Pattern pattern = Pattern.compile("([0-9]{3}-[0-9]{3}-[0-9]{4})");
+
+    public PhoneNumberScraper(List<String> keywords) {
+        super(keywords);
+    }
 
     @Override
     public double getScore(String text) {
-        double total = 0;
+        double total = getKeywordScore(text);
 
-        if (text.toLowerCase().contains("number")) {
+        if (text.toLowerCase().contains("number") || text.contains("#")) {
             total += 0.2;
         }
 
@@ -27,7 +30,7 @@ public class PhoneNumberScraper implements Scraper<String> {
             total += 0.5;
         }
 
-        if (text.toLowerCase().contains("phone number")) {
+        if (text.toLowerCase().contains("phone number") || text.contains("phone #")) {
             total += 1.0;
         }
 

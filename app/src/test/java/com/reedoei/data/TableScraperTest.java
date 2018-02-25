@@ -9,6 +9,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.junit.Test;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.Set;
 
@@ -27,6 +28,7 @@ public class TableScraperTest {
                     "       <th>Age</th>" +
                     "       <th>Phone Number</th>" +
                     "       <th>Favorite Food</th>" +
+                    "       <th>Birthday</th>" +
                     "   </tr>" +
                     "   <tr>" +
                     "       <td>John</td>" +
@@ -34,6 +36,7 @@ public class TableScraperTest {
                     "       <td>36</td>" +
                     "       <td>123-456-7890</td>" +
                     "       <td>Apples</td>" +
+                    "       <td>1998-11-26</td>" +
                     "   </tr>" +
                     "   <tr>" +
                     "       <td>Mary</td>" +
@@ -41,6 +44,7 @@ public class TableScraperTest {
                     "       <td>6</td>" +
                     "       <td>183-456-7890</td>" +
                     "       <td>Pie</td>" +
+                    "       <td>1980-05-23</td>" +
                     "   </tr>" +
                     "   <tr>" +
                     "       <td>Mike</td>" +
@@ -48,6 +52,7 @@ public class TableScraperTest {
                     "       <td>100</td>" +
                     "       <td>269-456-7890</td>" +
                     "       <td>Steak</td>" +
+                    "       <td>June 6, 1988</td>" +
                     "   </tr>" +
                     "</table>";
 
@@ -61,7 +66,7 @@ public class TableScraperTest {
         assertEquals(1, result.size());
 
         for (final Table table : result) {
-            assertEquals(12, table.query(Query.any()).size());
+            assertEquals(15, table.query(Query.any()).size());
         }
     }
 
@@ -77,7 +82,7 @@ public class TableScraperTest {
         for (final Table table : result) {
             final Set<Integer> dataSet = Data.collapseDataset(table.query(Query.age()));
 
-            assertEquals(3, dataSet);
+            assertEquals(3, dataSet.size());
             assertThat(dataSet, hasItems(100, 36, 6));
         }
     }
@@ -133,10 +138,26 @@ public class TableScraperTest {
     }
 
     @Test
-    public void scrapeWikipedia() throws Exception {
-        final Document doc = Jsoup.connect("https://en.wikipedia.org/wiki/George_Washington").get();
+    public void testScrapeBirthdays() throws Exception {
+        final Document doc = Jsoup.parse(testSimpleTable);
 
         final TableScraper scraper = new TableScraper(doc);
         final Set<Table> result = scraper.scrape();
+
+        assertEquals(1, result.size());
+
+        for (final Table table : result) {
+            final Set<Date> dataSet = Data.collapseDataset(table.query(Query.date(Collections.singletonList("birth"))));
+
+            assertEquals(3, dataSet.size());
+        }
+    }
+
+    @Test
+    public void scrapeWikipedia() throws Exception {
+        final Document doc = Jsoup.connect("https://en.wikipedia.org/wiki/List_of_presidents_of_the_United_States_by_age").get();
+
+        final TableScraper scraper = new TableScraper(doc);
+        final Set<Date> dataSet = Data.collapseDataset(scraper.query(Query.date()));
     }
 }

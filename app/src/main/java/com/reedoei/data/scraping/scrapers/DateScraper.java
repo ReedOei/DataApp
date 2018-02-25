@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
  * Created by roei on 2/24/18.
  */
 
-public class DateScraper implements Scraper<Date> {
+public class DateScraper extends AbstractScraper<Date> {
     private static final double KEYWORD_MULTIPLIER = 2.0;
 
     private static final Map<Pattern, SimpleDateFormat> patternMap = new HashMap<>();
@@ -43,11 +43,15 @@ public class DateScraper implements Scraper<Date> {
                 new SimpleDateFormat("MMM dd, yyyy"));
     }
 
+    public DateScraper(List<String> keywords) {
+        super(keywords);
+    }
+
     @Override
     public double getScore(final String text) {
-        double total = scrapeData(text).size();
+        double total = scrapeData(text).size() + getKeywordScore(text);
 
-        if (text.toLowerCase().contains("date") || text.toLowerCase().contains("year")) {
+        if (text.toLowerCase().contains("date") || text.toLowerCase().contains("year") || text.toLowerCase().contains("day")) {
             if (total == 0) {
                 total = 1;
             } else {

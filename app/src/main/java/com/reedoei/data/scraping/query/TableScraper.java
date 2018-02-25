@@ -33,7 +33,13 @@ public class TableScraper implements Queryable {
 
     @NonNull
     @Override
-    public Set<Data> query(final Query query) {
-        return new HashSet<>();
+    public <T> Set<Data<T>> query(final Query<T> query) {
+        final Set<Data<T>> dataSet = new HashSet<>();
+
+        for (final Table table : scrape()) {
+            dataSet.addAll(table.query(query));
+        }
+
+        return dataSet;
     }
 }

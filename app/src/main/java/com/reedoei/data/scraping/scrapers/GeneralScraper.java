@@ -3,25 +3,29 @@ package com.reedoei.data.scraping.scrapers;
 import android.support.annotation.NonNull;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 /**
  * Created by roei on 2/24/18.
  */
-public class GeneralScraper implements Scraper<String> {
+public class GeneralScraper extends AbstractScraper<String> {
     private final String name;
 
-    public GeneralScraper(final String name) {
+    public GeneralScraper(final String name, final List<String> keywords) {
+        super(keywords);
         this.name = name.toLowerCase();
     }
 
     @Override
     public double getScore(final String text) {
+        double total = getKeywordScore(text);
+
         if (text.toLowerCase().contains(name)) {
-            return 1.0;
-        } else {
-            return 0;
+            total += 1.0;
         }
+
+        return total;
     }
 
     @NonNull
