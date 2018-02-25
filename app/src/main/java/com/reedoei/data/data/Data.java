@@ -1,10 +1,13 @@
 package com.reedoei.data.data;
 
+import android.support.annotation.NonNull;
+
 import org.apache.commons.math3.util.Pair;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.function.Function;
 
@@ -12,7 +15,7 @@ import java.util.function.Function;
  * Created by roei on 2/24/18.
  */
 
-public class Data<T> {
+public class Data<T> implements Iterable<T> {
     static <T> Data<T> loadWrapper(final DataWrapper data, final Function<String, T> parser) {
         final List<T> dataValues = new ArrayList<>();
 
@@ -66,5 +69,11 @@ public class Data<T> {
         object.put("dataValues", dataValuesJSON);
 
         return object;
+    }
+
+    @NonNull
+    @Override
+    public Iterator<T> iterator() {
+        return dataValues.iterator();
     }
 }

@@ -3,9 +3,6 @@ package com.reedoei.data.data;
 import android.support.annotation.NonNull;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 
 import org.apache.commons.math3.util.Pair;
 import org.json.simple.JSONArray;
@@ -123,6 +120,10 @@ public class DataSet<T> implements Iterable<Data<T>>  {
         }
 
         return result;
+    }
+
+    public NumericDataSet frequency() {
+        return new FrequencyDataSet(this);
     }
 
     public static <K, V> DataSet<Pair<K,V>> zip(DataSet<K> keys, DataSet<V> values) {
