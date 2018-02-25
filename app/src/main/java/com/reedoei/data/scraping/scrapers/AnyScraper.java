@@ -15,8 +15,13 @@ public class AnyScraper extends AbstractScraper<String> {
     }
 
     @Override
-    public double getScore(final String text) {
-        return 0;
+    public double getDataFactor(List<String> potentialData) {
+        return 1.0;
+    }
+
+    @Override
+    public double getKeywordFactor(final String text) {
+        return 1.0;
     }
 
     @NonNull

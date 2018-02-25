@@ -3,10 +3,8 @@ package com.reedoei.data.scraping.scrapers;
 import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.regex.Pattern;
 
 /**
@@ -21,11 +19,16 @@ public class AgeScraper extends AbstractScraper<Integer> {
     }
 
     @Override
-    public double getScore(final String text) {
-        double total = getKeywordScore(text);
+    public double getDataFactor(List<String> potentialData) {
+        return 0.1; // There are tons of numbers, so this isn't that important to us.
+    }
+
+    @Override
+    public double getKeywordFactor(final String text) {
+        double total = 1.0;
 
         if (text.toLowerCase().contains("age")) {
-            total += 1;
+            total += 1.5;
         }
 
         return total;

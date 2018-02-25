@@ -86,4 +86,14 @@ class TableRow extends AbstractScraped implements Queryable {
     public Table getTable() {
         return table;
     }
+
+    public List<String> asStrings() {
+        final List<String> result = new ArrayList<>();
+
+        for (final TableCell cell : cells) {
+            result.add(cell.getText());
+        }
+
+        return result;
+    }
 }

@@ -23,12 +23,12 @@ public class Query<T> {
 
     public Data<T> scrape(String text) {
         final List<T> data = scraper.scrapeData(text);
-        final double score = scraper.getScore(text);
+        final double score = scraper.getKeywordFactor(text);
 
         return new Data<>(dataType, data, text, score);
     }
 
-    public double getScore(final String text) {
-        return scraper.getScore(text);
+    public double getScore(final String key, final List<String> potentialData) {
+        return scraper.getScore(key, potentialData);
     }
 }

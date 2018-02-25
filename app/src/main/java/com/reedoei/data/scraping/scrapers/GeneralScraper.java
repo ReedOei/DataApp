@@ -4,7 +4,6 @@ import android.support.annotation.NonNull;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by roei on 2/24/18.
@@ -15,8 +14,13 @@ public class GeneralScraper extends AbstractScraper<String> {
     }
 
     @Override
-    public double getScore(final String text) {
-        return getKeywordScore(text);
+    public double getDataFactor(List<String> potentialData) {
+        return 1.0;
+    }
+
+    @Override
+    public double getKeywordFactor(final String text) {
+        return 1.0;
     }
 
     @NonNull

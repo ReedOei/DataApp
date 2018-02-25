@@ -2,9 +2,7 @@ package com.reedoei.data.scraping.scrapers;
 
 import android.support.annotation.NonNull;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.regex.Pattern;
 
 /**
@@ -19,8 +17,13 @@ public class PhoneNumberScraper extends AbstractScraper<String> {
     }
 
     @Override
-    public double getScore(String text) {
-        double total = getKeywordScore(text);
+    public double getDataFactor(List<String> potentialData) {
+        return 1.0;
+    }
+
+    @Override
+    public double getKeywordFactor(String text) {
+        double total = 1.0;
 
         if (text.toLowerCase().contains("number") || text.contains("#")) {
             total += 0.2;

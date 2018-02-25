@@ -106,7 +106,7 @@ public class Table extends AbstractScraped implements Queryable {
         double maxScore = 0; // 0 is the min, all scores should be positive.
 
         for (final TableCell first : initialCells) {
-            final double score = INITIAL_CELL_MODIFIER * query.getScore(first.getText());
+            final double score = INITIAL_CELL_MODIFIER * query.getScore(first.getText(), first.getRow().asStrings());
 
             if (score > maxScore) {
                 bestRow = first.getRow();
@@ -115,7 +115,7 @@ public class Table extends AbstractScraped implements Queryable {
         }
 
         for (final TableCell header : headerRow) {
-            final double score = HEADER_ROW_MODIFIER * query.getScore(header.getText());
+            final double score = HEADER_ROW_MODIFIER * query.getScore(header.getText(), header.getColumn().asStrings());
 
             if (score > maxScore) {
                 bestRow = header.getColumn();
@@ -125,7 +125,7 @@ public class Table extends AbstractScraped implements Queryable {
 
         for (final TableRow row : dataRows) {
             for (final TableCell cell : row.getCells()) {
-                final double score = query.getScore(cell.getText());
+                final double score = query.getScore(cell.getText(), row.asStrings());
 
                 if (score > maxScore) {
                     bestRow = row;

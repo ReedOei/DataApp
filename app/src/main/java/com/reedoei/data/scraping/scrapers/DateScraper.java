@@ -7,10 +7,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.regex.Pattern;
 
 /**
@@ -49,15 +47,16 @@ public class DateScraper extends AbstractScraper<Date> {
     }
 
     @Override
-    public double getScore(final String text) {
-        double total = scrapeData(text).size() + getKeywordScore(text);
+    public double getDataFactor(List<String> potentialData) {
+        return 1.0;
+    }
+
+    @Override
+    public double getKeywordFactor(final String text) {
+        double total = 1.0;
 
         if (text.toLowerCase().contains("date") || text.toLowerCase().contains("year") || text.toLowerCase().contains("day")) {
-            if (total == 0) {
-                total = 1;
-            } else {
-                total *= KEYWORD_MULTIPLIER;
-            }
+            total += KEYWORD_MULTIPLIER;
         }
 
         return total;

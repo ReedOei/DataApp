@@ -211,4 +211,32 @@ public class TableScraperTest {
 
         assertTrue(found);
     }
+
+    @Test
+    public void testScrapeWikipediaWithNamesAsKeys() throws Exception {
+        final Document doc = Jsoup.connect("https://en.wikipedia.org/wiki/List_of_presidents_of_the_United_States_by_age").get();
+
+        final TableScraper scraper = new TableScraper(doc);
+
+        final Query<String> nameQuery = QueryBuilder.general().keyword("president").build();
+        final Query<Date> birthQuery = QueryBuilder.date().keyword("birth").build();
+
+        final Set<Pair<String, Date>> dataSet = scraper.handleQueryWithKey(nameQuery, birthQuery).asSet();
+
+        boolean found = false;
+        for (final Pair<String, Date> pair : dataSet) {
+            // Check that at least jimmy carter's birthday is on the list, and that it get's properly matched with his name.
+            if (pair.getKey().contains("Jimmy Carter")) {
+                LocalDate localDate = pair.getValue().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+                if (localDate.getMonth().equals(Month.OCTOBER) &&
+                        localDate.getDayOfMonth() == 1 &&
+                        localDate.getYear() == 1924) {
+                    found = true;
+                }
+            }
+        }
+
+        assertTrue(found);
+    }
 }
