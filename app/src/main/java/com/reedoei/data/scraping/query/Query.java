@@ -2,8 +2,10 @@ package com.reedoei.data.scraping.query;
 
 import com.reedoei.data.scraping.scrapers.AgeScraper;
 import com.reedoei.data.scraping.scrapers.AnyScraper;
+import com.reedoei.data.scraping.scrapers.DateScraper;
 import com.reedoei.data.scraping.scrapers.Scraper;
 
+import java.util.Date;
 import java.util.Set;
 
 /**
@@ -21,6 +23,10 @@ public class Query<T> {
 
     public static Query<Integer> age() {
         return new Query<>(DataType.AGE, "age", new AgeScraper());
+    }
+
+    public static Query<Date> date() {
+        return new Query<>(DataType.DATE, "date", new DateScraper());
     }
 
     public Query(DataType dataType, String dataTypeStr, Scraper<T> scraper) {

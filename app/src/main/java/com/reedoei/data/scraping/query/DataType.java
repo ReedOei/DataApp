@@ -8,5 +8,7 @@ public enum DataType {
     AGE,
     MASS,
     ANY,
-    OTHER
+    DATE,
+    PHONE_NUMBER,
+    GENERAL
 }

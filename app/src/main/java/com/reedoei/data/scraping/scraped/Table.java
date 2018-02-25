@@ -38,7 +38,7 @@ public class Table extends AbstractScraped implements Queryable {
         }
 
         for (final TableRow row : dataRows) {
-            if (!row.hasCells()) {
+            if (row.hasCells()) {
                 initialCells.add(row.getCells().get(0));
             }
         }
@@ -56,37 +56,7 @@ public class Table extends AbstractScraped implements Queryable {
 
             return result;
         } else {
-            TableRow bestRow = null;
-            double maxScore = 0; // 0 is the min, all scores should be positive.
-
-            for (final TableCell first : initialCells) {
-                final double score = INITIAL_CELL_MODIFIER * query.getScore(first.getText());
-
-                if (score > maxScore) {
-                    bestRow = first.getRow();
-                    maxScore = score;
-                }
-            }
-
-            for (final TableCell header : headerRow) {
-                final double score = HEADER_ROW_MODIFIER * query.getScore(header.getText());
-
-                if (score > maxScore) {
-                    bestRow = header.getColumn();
-                    maxScore = score;
-                }
-            }
-
-            for (final TableRow row : dataRows) {
-                for (final TableCell cell : row.getCells()) {
-                    final double score = query.getScore(cell.getText());
-
-                    if (score > maxScore) {
-                        bestRow = row;
-                        maxScore = score;
-                    }
-                }
-            }
+            final TableRow bestRow = findBestRow(query);
 
             if (bestRow == null) {
                 return new HashSet<>();
@@ -94,6 +64,42 @@ public class Table extends AbstractScraped implements Queryable {
                 return bestRow.query(query);
             }
         }
+    }
+
+    private <T> TableRow findBestRow(final Query<T> query) {
+        TableRow bestRow = null;
+        double maxScore = 0; // 0 is the min, all scores should be positive.
+
+        for (final TableCell first : initialCells) {
+            final double score = INITIAL_CELL_MODIFIER * query.getScore(first.getText());
+
+            if (score > maxScore) {
+                bestRow = first.getRow();
+                maxScore = score;
+            }
+        }
+
+        for (final TableCell header : headerRow) {
+            final double score = HEADER_ROW_MODIFIER * query.getScore(header.getText());
+
+            if (score > maxScore) {
+                bestRow = header.getColumn();
+                maxScore = score;
+            }
+        }
+
+        for (final TableRow row : dataRows) {
+            for (final TableCell cell : row.getCells()) {
+                final double score = query.getScore(cell.getText());
+
+                if (score > maxScore) {
+                    bestRow = row;
+                    maxScore = score;
+                }
+            }
+        }
+
+        return bestRow;
     }
 
     public TableRow getColumn(int index) {

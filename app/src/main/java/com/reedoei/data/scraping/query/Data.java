@@ -1,5 +1,6 @@
 package com.reedoei.data.scraping.query;
 
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -23,5 +24,15 @@ public class Data<T> {
         this.raw = raw;
 
         this.score = score;
+    }
+
+    public static <T> Set<T> collapseDataset(final Set<Data<T>> dataSet) {
+        final Set<T> result = new HashSet<>();
+
+        for (final Data<T> data : dataSet) {
+            result.addAll(data.dataValues);
+        }
+
+        return result;
     }
 }

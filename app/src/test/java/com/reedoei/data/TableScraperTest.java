@@ -11,6 +11,7 @@ import org.jsoup.nodes.Document;
 import org.junit.Test;
 import org.junit.matchers.JUnitMatchers;
 
+import java.util.Date;
 import java.util.Set;
 
 import static org.junit.Assert.*;
@@ -72,9 +73,26 @@ public class TableScraperTest {
         assertEquals(1, result.size());
 
         for (final Table table : result) {
-            final Set<Data<Integer>> dataSet = table.query(Query.age());
+            final Set<Integer> dataSet = Data.collapseDataset(table.query(Query.age()));
 
-            assertEquals(3, table.query(Query.age()).size());
+            assertEquals(3, dataSet);
+            assertThat(dataSet, hasItems(100, 36, 6));
+        }
+    }
+
+    @Test
+    public void testScrapeDates() throws Exception {
+        final Document doc = Jsoup.parse(testSimpleTable);
+
+        final TableScraper scraper = new TableScraper(doc);
+        final Set<Table> result = scraper.scrape();
+
+        assertEquals(1, result.size());
+
+        for (final Table table : result) {
+            final Set<Date> dataSet = Data.collapseDataset(table.query(Query.date()));
+
+            assertEquals(3, dataSet.size());
         }
     }
 
