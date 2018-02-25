@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -64,8 +65,8 @@ public class DateScraper extends AbstractScraper<Date> {
 
     @NonNull
     @Override
-    public Set<Date> scrapeData(String text) {
-        final Set<Date> result = new HashSet<>();
+    public List<Date> scrapeData(String text) {
+        final List<Date> result = new ArrayList<>();
 
         for (final Map.Entry<Pattern, SimpleDateFormat> entry : patternMap.entrySet()) {
             final SimpleDateFormat format = entry.getValue();

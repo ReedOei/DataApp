@@ -10,5 +10,6 @@ public enum DataType {
     ANY,
     DATE,
     PHONE_NUMBER,
-    GENERAL
+    GENERAL,
+    KEY_VALUE
 }

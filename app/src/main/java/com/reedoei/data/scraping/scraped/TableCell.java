@@ -4,9 +4,11 @@ import android.support.annotation.NonNull;
 
 import com.reedoei.data.scraping.query.Data;
 import com.reedoei.data.scraping.query.DataSet;
+import com.reedoei.data.scraping.query.InvalidQueryException;
 import com.reedoei.data.scraping.query.Query;
 import com.reedoei.data.scraping.query.Queryable;
 
+import org.apache.commons.math3.util.Pair;
 import org.jsoup.nodes.Element;
 
 import java.util.Collections;
@@ -27,12 +29,6 @@ class TableCell extends AbstractScraped implements Queryable {
         this.row = row;
     }
 
-    @NonNull
-    @Override
-    public <T> Set<Data<T>> query(final Query<T> query) {
-        return Collections.singleton(query.scrape(text));
-    }
-
     @Override
     public <T> double getScore(Query<T> query) {
         return row.getTable().getScore(query);
@@ -43,7 +39,13 @@ class TableCell extends AbstractScraped implements Queryable {
     public <T> DataSet<T> handleQuery(Query<T> query) {
         final double score = row.getTable().getScore(query);
 
-        return new DataSet<>(score, Collections.singleton(query.scrape(text)));
+        return new DataSet<>(score, Collections.singletonList(query.scrape(text)));
+    }
+
+    @NonNull
+    @Override
+    public <K, V> DataSet<Pair<K, V>> handleQueryWithKey(Query<K> keyQuery, Query<V> valueQuery) throws InvalidQueryException {
+        throw new InvalidQueryException("Cannot handle query with key on table cell!");
     }
 
     public String getText() {

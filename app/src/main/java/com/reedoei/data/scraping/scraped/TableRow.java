@@ -4,9 +4,11 @@ import android.support.annotation.NonNull;
 
 import com.reedoei.data.scraping.query.Data;
 import com.reedoei.data.scraping.query.DataSet;
+import com.reedoei.data.scraping.query.InvalidQueryException;
 import com.reedoei.data.scraping.query.Query;
 import com.reedoei.data.scraping.query.Queryable;
 
+import org.apache.commons.math3.util.Pair;
 import org.jsoup.nodes.Element;
 
 import java.util.ArrayList;
@@ -59,6 +61,12 @@ class TableRow extends AbstractScraped implements Queryable {
         }
 
         return result.withScore(score);
+    }
+
+    @NonNull
+    @Override
+    public <K, V> DataSet<Pair<K, V>> handleQueryWithKey(Query<K> keyQuery, Query<V> valueQuery) throws InvalidQueryException {
+        throw new InvalidQueryException("Cannot handle query with key on table row!");
     }
 
     public TableRow getColumn(final TableCell tableCell) {

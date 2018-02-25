@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.reedoei.data.scraping.query.DataSet;
 import com.reedoei.data.scraping.query.DataType;
+import com.reedoei.data.scraping.query.InvalidQueryException;
 import com.reedoei.data.scraping.query.Query;
 import com.reedoei.data.scraping.query.Queryable;
 
@@ -62,6 +63,35 @@ public class Table extends AbstractScraped implements Queryable {
             } else {
                 return bestRow.getValue().handleQuery(query);
             }
+        }
+    }
+
+    @NonNull
+    @Override
+    public <K, V> DataSet<Pair<K, V>> handleQueryWithKey(Query<K> keyQuery, Query<V> valueQuery) throws InvalidQueryException {
+        if (valueQuery.getDataType().equals(DataType.ANY)) {
+            throw new InvalidQueryException("Cannot do a key query on a table with DataType.ANY!");
+        } else {
+            DataSet<K> keys = DataSet.empty();
+            DataSet<V> values = DataSet.empty();
+
+            final Pair<Double, TableRow> bestKeyRow = findBestRow(keyQuery);
+
+            if (bestKeyRow.getValue() == null) {
+                return DataSet.empty();
+            } else {
+                keys = bestKeyRow.getValue().handleQuery(keyQuery);
+            }
+
+            final Pair<Double, TableRow> bestValueRow = findBestRow(valueQuery);
+
+            if (bestValueRow.getValue() == null) {
+                return DataSet.empty();
+            } else {
+                values = bestValueRow.getValue().handleQuery(valueQuery);
+            }
+
+            return DataSet.zip(keys, values);
         }
     }
 

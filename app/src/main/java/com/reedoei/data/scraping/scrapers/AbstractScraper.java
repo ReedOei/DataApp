@@ -38,5 +38,5 @@ public abstract class AbstractScraper<T> {
     public abstract double getScore(final String text);
 
     @NonNull
-    public abstract Set<T> scrapeData(final String text);
+    public abstract List<T> scrapeData(final String text);
 }

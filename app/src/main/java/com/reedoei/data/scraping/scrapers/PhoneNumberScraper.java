@@ -39,7 +39,7 @@ public class PhoneNumberScraper extends AbstractScraper<String> {
 
     @NonNull
     @Override
-    public Set<String> scrapeData(String text) {
-        return new HashSet<>(ScraperUtils.findAllStrings(pattern, text));
+    public List<String> scrapeData(String text) {
+        return ScraperUtils.findAllStrings(pattern, text);
     }
 }

@@ -2,8 +2,12 @@ package com.reedoei.data.scraping.query;
 
 import android.support.annotation.NonNull;
 
+import org.apache.commons.math3.util.Pair;
+
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -12,13 +16,13 @@ import java.util.Set;
 
 public class DataSet<T> implements Iterable<Data<T>>  {
     public static <T> DataSet<T> empty() {
-        return new DataSet<>(0, new HashSet<>());
+        return new DataSet<>(0, new ArrayList<>());
     }
 
     private double score;
-    private final Set<Data<T>> data;
+    private final List<Data<T>> data;
 
-    public DataSet(double score, Set<Data<T>> data) {
+    public DataSet(double score, List<Data<T>> data) {
         this.score = score;
         this.data = data;
     }
@@ -27,7 +31,7 @@ public class DataSet<T> implements Iterable<Data<T>>  {
         return score;
     }
 
-    public Set<Data<T>> getData() {
+    public List<Data<T>> getData() {
         return data;
     }
 
@@ -62,5 +66,34 @@ public class DataSet<T> implements Iterable<Data<T>>  {
         }
 
         return result;
+    }
+
+    public static <K, V> DataSet<Pair<K,V>> zip(DataSet<K> keys, DataSet<V> values) {
+        final List<Data<Pair<K,V>>> data = new ArrayList<>();
+
+        double score = Math.max(keys.getScore(), values.getScore());
+
+        for (int k = 0; k < keys.data.size(); k++) {
+            if (k >= values.data.size()) {
+                break;
+            }
+
+            final List<Pair<K,V>> pairs = new ArrayList<>();
+
+            final List<K> keyVals = keys.data.get(k).getDataValues();
+            final List<V> vals = values.data.get(k).getDataValues();
+
+            for (int j = 0; j < keyVals.size(); j++) {
+                if (j >= vals.size()) {
+                    break;
+                }
+
+                pairs.add(new Pair<>(keyVals.get(j), vals.get(j)));
+            }
+
+            data.add(new Data<>(DataType.KEY_VALUE, pairs, "", score));
+        }
+
+        return new DataSet<>(score, data);
     }
 }

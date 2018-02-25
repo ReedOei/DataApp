@@ -2,6 +2,7 @@ package com.reedoei.data.scraping.scrapers;
 
 import android.support.annotation.NonNull;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -32,8 +33,8 @@ public class AgeScraper extends AbstractScraper<Integer> {
 
     @NonNull
     @Override
-    public Set<Integer> scrapeData(final String text) {
-        final Set<Integer> result = new HashSet<>();
+    public List<Integer> scrapeData(final String text) {
+        final List<Integer> result = new ArrayList<>();
 
         final List<Map<Integer, String>> matches = ScraperUtils.findAll(agePattern, text);
 

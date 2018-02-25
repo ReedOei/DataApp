@@ -21,7 +21,7 @@ public class GeneralScraper extends AbstractScraper<String> {
 
     @NonNull
     @Override
-    public Set<String> scrapeData(final String text) {
-        return Collections.singleton(text);
+    public List<String> scrapeData(final String text) {
+        return Collections.singletonList(text);
     }
 }

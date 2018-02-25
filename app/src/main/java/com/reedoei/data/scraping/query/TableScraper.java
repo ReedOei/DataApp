@@ -1,10 +1,10 @@
 package com.reedoei.data.scraping.query;
 
 import android.support.annotation.NonNull;
-import android.util.Pair;
 
 import com.reedoei.data.scraping.scraped.Table;
 
+import org.apache.commons.math3.util.Pair;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
@@ -33,22 +33,34 @@ public class TableScraper implements Queryable {
     }
 
     @NonNull
+    @Override
     public <T> DataSet<T> handleQuery(Query<T> query) {
-        Set<Data<T>> dataSet = new HashSet<>();
+        DataSet<T> dataSet = DataSet.empty();
 
-        double maxScore = 0;
-
-        // Return the data set with the highest score;
         for (final Table table : scrape()) {
-            final Set<Data<T>> tempDataSet = table.query(query);
-            double score = table.getScore(query);
+            final DataSet<T> tempDataSet = table.handleQuery(query);
 
-            if (score > maxScore) {
-                maxScore = score;
+            if (tempDataSet.getScore() > dataSet.getScore()) {
                 dataSet = tempDataSet;
             }
         }
 
-        return new DataSet<>(maxScore, dataSet);
+        return dataSet;
+    }
+
+    @NonNull
+    @Override
+    public <K, V> DataSet<Pair<K, V>> handleQueryWithKey(Query<K> keyQuery, Query<V> valueQuery) throws InvalidQueryException {
+        DataSet<Pair<K,V>> dataSet = DataSet.empty();
+
+        for (final Table table : scrape()) {
+            final DataSet<Pair<K, V>> tempDataSet = table.handleQueryWithKey(keyQuery, valueQuery);
+
+            if (tempDataSet.getScore() > dataSet.getScore()) {
+                dataSet = tempDataSet;
+            }
+        }
+
+        return dataSet;
     }
 }

@@ -4,7 +4,6 @@ import android.support.annotation.NonNull;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by roei on 2/24/18.
@@ -22,7 +21,7 @@ public class AnyScraper extends AbstractScraper<String> {
 
     @NonNull
     @Override
-    public Set<String> scrapeData(final String text) {
-        return Collections.singleton(text);
+    public List<String> scrapeData(final String text) {
+        return Collections.singletonList(text);
     }
 }

@@ -1,7 +1,6 @@
 package com.reedoei.data.scraping.query;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 /**
  * Created by roei on 2/24/18.
@@ -9,13 +8,13 @@ import java.util.Set;
 
 public class Data<T> {
     private final DataType dataType;
-    private final Set<T> dataValues;
+    private final List<T> dataValues;
 
     private final double score;
 
     private final String raw;
 
-    public Data(DataType dataType, Set<T> dataValues, String raw, double score) {
+    public Data(DataType dataType, List<T> dataValues, String raw, double score) {
         this.dataType = dataType;
         this.dataValues = dataValues;
 
@@ -24,7 +23,7 @@ public class Data<T> {
         this.score = score;
     }
 
-    public Set<T> getDataValues() {
+    public List<T> getDataValues() {
         return dataValues;
     }
 }

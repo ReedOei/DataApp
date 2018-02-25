@@ -5,6 +5,7 @@ import com.reedoei.data.scraping.query.QueryBuilder;
 import com.reedoei.data.scraping.scraped.Table;
 import com.reedoei.data.scraping.query.TableScraper;
 
+import org.apache.commons.math3.util.Pair;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.junit.Test;
@@ -12,7 +13,6 @@ import org.junit.Test;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.ZoneId;
-import java.util.Collections;
 import java.util.Date;
 import java.util.Set;
 
@@ -69,7 +69,7 @@ public class TableScraperTest {
         assertEquals(1, result.size());
 
         for (final Table table : result) {
-            assertEquals(18, table.query(QueryBuilder.any().build()).size());
+            assertEquals(18, table.handleQuery(QueryBuilder.any().build()).getData().size());
         }
     }
 
@@ -157,7 +157,41 @@ public class TableScraperTest {
     }
 
     @Test
-    public void scrapeWikipedia() throws Exception {
+    public void testScrapeBirthdaysWithNamesAsKey() throws Exception {
+        final Document doc = Jsoup.parse(testSimpleTable);
+
+        final TableScraper scraper = new TableScraper(doc);
+        final Set<Table> result = scraper.scrape();
+
+        assertEquals(1, result.size());
+
+        for (final Table table : result) {
+            final Query<String> nameQuery = QueryBuilder.general().keyword("name").build();
+            final Query<Date> valueQuery = QueryBuilder.date().keyword("birth").build();
+            final Set<Pair<String, Date>> dataSet = table.handleQueryWithKey(nameQuery, valueQuery).asSet();
+
+            assertEquals(3, dataSet.size());
+
+            boolean found = false;
+
+            for (final Pair<String, Date> pair : dataSet) {
+                if (pair.getKey().equals("Mike")) {
+                    LocalDate localDate = pair.getValue().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+                    if (localDate.getMonth().equals(Month.JUNE) &&
+                            localDate.getDayOfMonth() == 6 &&
+                            localDate.getYear() == 1988) {
+                        found = true;
+                    }
+                }
+            }
+
+            assertTrue(found);
+        }
+    }
+
+    @Test
+    public void testScrapeWikipedia() throws Exception {
         final Document doc = Jsoup.connect("https://en.wikipedia.org/wiki/List_of_presidents_of_the_United_States_by_age").get();
 
         final TableScraper scraper = new TableScraper(doc);
