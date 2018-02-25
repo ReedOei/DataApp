@@ -10,10 +10,10 @@ import static org.junit.Assert.*;
 /**
  * Created by roei on 2/25/18.
  */
-public class DDGSearcherTest {
+public class SearcherTest {
     @Test
     public void search() throws Exception {
-        final List<Document> documents = new DDGSearcher().search(new Search("apple"));
+        final List<Document> documents = new Searcher(new Search("apple")).search();
 
         assertFalse(documents.isEmpty());
     }
