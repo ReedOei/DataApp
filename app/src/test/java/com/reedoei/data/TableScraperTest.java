@@ -27,25 +27,29 @@ public class TableScraperTest {
                     "       <th>Name</th>" +
                     "       <th>Date</th>" +
                     "       <th>Age</th>" +
-                "           <th>Phone Number</th>" +
+                    "       <th>Phone Number</th>" +
+                    "       <th>Favorite Food</th>" +
                     "   </tr>" +
                     "   <tr>" +
                     "       <td>John</td>" +
                     "       <td>February 21, 2018</td>" +
                     "       <td>36</td>" +
                     "       <td>123-456-7890</td>" +
+                    "       <td>Apples</td>" +
                     "   </tr>" +
                     "   <tr>" +
                     "       <td>Mary</td>" +
                     "       <td>August 7, 345</td>" +
                     "       <td>6</td>" +
                     "       <td>183-456-7890</td>" +
+                    "       <td>Pie</td>" +
                     "   </tr>" +
                     "   <tr>" +
                     "       <td>Mike</td>" +
                     "       <td>1457-9-08</td>" +
                     "       <td>100</td>" +
                     "       <td>269-456-7890</td>" +
+                    "       <td>Steak</td>" +
                     "   </tr>" +
                     "</table>";
 
@@ -93,6 +97,23 @@ public class TableScraperTest {
             final Set<Date> dataSet = Data.collapseDataset(table.query(Query.date()));
 
             assertEquals(3, dataSet.size());
+        }
+    }
+
+    @Test
+    public void testGeneralScraper() throws Exception {
+        final Document doc = Jsoup.parse(testSimpleTable);
+
+        final TableScraper scraper = new TableScraper(doc);
+        final Set<Table> result = scraper.scrape();
+
+        assertEquals(1, result.size());
+
+        for (final Table table : result) {
+            final Set<String> dataSet = Data.collapseDataset(table.query(Query.general("food")));
+
+            assertEquals(3, dataSet.size());
+            assertThat(dataSet, hasItems("Steak", "Apples", "Pie"));
         }
     }
 
