@@ -17,16 +17,30 @@ import java.util.Set;
  */
 class TableCell extends AbstractScraped implements Queryable {
     private final String text;
+    private final TableRow row;
 
-    public TableCell(final Element element) {
+    public TableCell(final TableRow row, final Element element) {
         super(element);
 
         text = element.text();
+        this.row = row;
     }
 
     @NonNull
     @Override
     public <T> Set<Data<T>> query(final Query<T> query) {
         return Collections.singleton(query.scrape(text));
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public TableRow getRow() {
+        return row;
+    }
+
+    public TableRow getColumn() {
+        return row.getColumn(this);
     }
 }

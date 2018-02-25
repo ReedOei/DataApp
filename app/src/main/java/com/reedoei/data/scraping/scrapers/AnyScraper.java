@@ -1,5 +1,7 @@
 package com.reedoei.data.scraping.scrapers;
 
+import android.support.annotation.NonNull;
+
 import java.util.Collections;
 import java.util.Set;
 
@@ -13,6 +15,7 @@ public class AnyScraper implements Scraper<String> {
         return 0;
     }
 
+    @NonNull
     @Override
     public Set<String> scrapeData(final String text) {
         return Collections.singleton(text);

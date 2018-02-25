@@ -17,8 +17,11 @@ import java.util.Set;
 /**
  * Created by roei on 2/24/18.
  */
-
 public class Table extends AbstractScraped implements Queryable {
+    // These are better than just finding stuff randomly in the row.
+    private static final double INITIAL_CELL_MODIFIER = 2.0;
+    private static final double HEADER_ROW_MODIFIER = 2.0;
+
     private final List<TableCell> headerRow = new ArrayList<>();
     private final List<TableCell> initialCells = new ArrayList<>();
     private final List<TableRow> dataRows = new ArrayList<>();
@@ -53,7 +56,55 @@ public class Table extends AbstractScraped implements Queryable {
 
             return result;
         } else {
-            return new HashSet<>();
+            TableRow bestRow = null;
+            double maxScore = 0; // 0 is the min, all scores should be positive.
+
+            for (final TableCell first : initialCells) {
+                final double score = INITIAL_CELL_MODIFIER * query.getScore(first.getText());
+
+                if (score > maxScore) {
+                    bestRow = first.getRow();
+                    maxScore = score;
+                }
+            }
+
+            for (final TableCell header : headerRow) {
+                final double score = HEADER_ROW_MODIFIER * query.getScore(header.getText());
+
+                if (score > maxScore) {
+                    bestRow = header.getColumn();
+                    maxScore = score;
+                }
+            }
+
+            for (final TableRow row : dataRows) {
+                for (final TableCell cell : row.getCells()) {
+                    final double score = query.getScore(cell.getText());
+
+                    if (score > maxScore) {
+                        bestRow = row;
+                        maxScore = score;
+                    }
+                }
+            }
+
+            if (bestRow == null) {
+                return new HashSet<>();
+            } else {
+                return bestRow.query(query);
+            }
         }
+    }
+
+    public TableRow getColumn(int index) {
+        final List<TableCell> cells = new ArrayList<>();
+
+        for (final TableRow row : dataRows) {
+            if (row.hasColumn(index)) {
+                cells.add(row.getCell(index));
+            }
+        }
+
+        return new TableRow(this, cells);
     }
 }

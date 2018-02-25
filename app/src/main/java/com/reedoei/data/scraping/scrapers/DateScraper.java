@@ -1,5 +1,7 @@
 package com.reedoei.data.scraping.scrapers;
 
+import android.support.annotation.NonNull;
+
 import java.util.Date;
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -16,6 +18,7 @@ public class DateScraper implements Scraper<Date> {
         return 0;
     }
 
+    @NonNull
     @Override
     public Set<Date> scrapeData(String text) {
         return null;

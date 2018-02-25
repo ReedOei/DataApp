@@ -20,13 +20,20 @@ class TableRow extends AbstractScraped implements Queryable {
     private Table table;
     private final List<TableCell> cells = new ArrayList<>();
 
+    public TableRow(final Table table, final List<TableCell> cells) {
+        super(null);
+
+        this.table = table;
+        this.cells.addAll(cells);
+    }
+
     public TableRow(Table table, final Element element) {
         super(element);
         this.table = table;
 
         for (final Element td : element.getAllElements()) {
             if (td.tagName().equals("td") || td.tagName().equals("th")) {
-                cells.add(new TableCell(td));
+                cells.add(new TableCell(this, td));
             }
         }
     }
@@ -49,5 +56,19 @@ class TableRow extends AbstractScraped implements Queryable {
         }
 
         return result;
+    }
+
+    public TableRow getColumn(final TableCell tableCell) {
+        final int index = cells.indexOf(tableCell);
+
+        return table.getColumn(index);
+    }
+
+    public TableCell getCell(int index) {
+        return cells.get(index);
+    }
+
+    public boolean hasColumn(int index) {
+        return cells.size() > index;
     }
 }

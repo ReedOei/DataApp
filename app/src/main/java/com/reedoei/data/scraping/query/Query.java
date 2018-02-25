@@ -1,5 +1,6 @@
 package com.reedoei.data.scraping.query;
 
+import com.reedoei.data.scraping.scrapers.AgeScraper;
 import com.reedoei.data.scraping.scrapers.AnyScraper;
 import com.reedoei.data.scraping.scrapers.Scraper;
 
@@ -14,8 +15,12 @@ public class Query<T> {
     private final String dataTypeStr;
     private final Scraper<T> scraper;
 
-    public static Query<String> getAll() {
+    public static Query<String> any() {
         return new Query<>(DataType.ANY, "", new AnyScraper());
+    }
+
+    public static Query<Integer> age() {
+        return new Query<>(DataType.AGE, "age", new AgeScraper());
     }
 
     public Query(DataType dataType, String dataTypeStr, Scraper<T> scraper) {
@@ -33,5 +38,9 @@ public class Query<T> {
         final double score = scraper.getScore(text);
 
         return new Data<>(dataType, dataTypeStr, data, text, score);
+    }
+
+    public double getScore(final String text) {
+        return scraper.getScore(text);
     }
 }
