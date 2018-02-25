@@ -5,11 +5,9 @@ import com.reedoei.data.scraping.query.Query;
 import com.reedoei.data.scraping.scraped.Table;
 import com.reedoei.data.scraping.query.TableScraper;
 
-import org.hamcrest.CoreMatchers;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.junit.Test;
-import org.junit.matchers.JUnitMatchers;
 
 import java.util.Date;
 import java.util.Set;
@@ -114,6 +112,23 @@ public class TableScraperTest {
 
             assertEquals(3, dataSet.size());
             assertThat(dataSet, hasItems("Steak", "Apples", "Pie"));
+        }
+    }
+
+    @Test
+    public void testPhoneNumberScraper() throws Exception {
+        final Document doc = Jsoup.parse(testSimpleTable);
+
+        final TableScraper scraper = new TableScraper(doc);
+        final Set<Table> result = scraper.scrape();
+
+        assertEquals(1, result.size());
+
+        for (final Table table : result) {
+            final Set<String> dataSet = Data.collapseDataset(table.query(Query.phoneNumber()));
+
+            assertEquals(3, dataSet.size());
+            assertThat(dataSet, hasItems("269-456-7890", "123-456-7890", "183-456-7890"));
         }
     }
 

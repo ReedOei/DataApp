@@ -28,4 +28,16 @@ public class ScraperUtils {
 
         return result;
     }
+
+    public static List<String> findAllStrings(final Pattern pattern, final String text) {
+        final List<Map<Integer, String>> matches = findAll(pattern, text);
+
+        final List<String> result = new ArrayList<>();
+
+        for (final Map<Integer, String> m : matches) {
+            result.addAll(m.values());
+        }
+
+        return result;
+    }
 }

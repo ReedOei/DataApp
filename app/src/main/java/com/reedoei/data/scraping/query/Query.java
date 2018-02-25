@@ -4,6 +4,7 @@ import com.reedoei.data.scraping.scrapers.AgeScraper;
 import com.reedoei.data.scraping.scrapers.AnyScraper;
 import com.reedoei.data.scraping.scrapers.DateScraper;
 import com.reedoei.data.scraping.scrapers.GeneralScraper;
+import com.reedoei.data.scraping.scrapers.PhoneNumberScraper;
 import com.reedoei.data.scraping.scrapers.Scraper;
 
 import java.util.Date;
@@ -32,6 +33,10 @@ public class Query<T> {
 
     public static Query<String> general(final String name) {
         return new Query<>(DataType.GENERAL, "general", new GeneralScraper(name));
+    }
+
+    public static Query<String> phoneNumber() {
+        return new Query<>(DataType.PHONE_NUMBER, "phone-number", new PhoneNumberScraper());
     }
 
     public Query(DataType dataType, String dataTypeStr, Scraper<T> scraper) {
