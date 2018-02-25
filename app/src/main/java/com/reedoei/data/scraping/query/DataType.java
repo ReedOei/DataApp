@@ -7,5 +7,6 @@ package com.reedoei.data.scraping.query;
 public enum DataType {
     AGE,
     MASS,
+    ANY,
     OTHER
 }

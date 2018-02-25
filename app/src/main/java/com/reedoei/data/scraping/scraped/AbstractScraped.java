@@ -1,4 +1,4 @@
-package com.reedoei.data.scraping;
+package com.reedoei.data.scraping.scraped;
 
 import org.jsoup.nodes.Element;
 
@@ -6,10 +6,10 @@ import org.jsoup.nodes.Element;
  * Created by roei on 2/24/18.
  */
 
-public class Scraped {
+public abstract class AbstractScraped {
     private final Element element;
 
-    public Scraped(final Element element) {
+    public AbstractScraped(final Element element) {
         this.element = element;
     }
 }

@@ -1,6 +1,7 @@
 package com.reedoei.data;
 
-import com.reedoei.data.scraping.Table;
+import com.reedoei.data.scraping.query.Query;
+import com.reedoei.data.scraping.scraped.Table;
 import com.reedoei.data.scraping.query.TableScraper;
 
 import org.jsoup.Jsoup;
@@ -51,7 +52,10 @@ public class TableScraperTest {
         final Set<Table> result = scraper.scrape();
 
         assertEquals(1, result.size());
-        assertEquals(3, result.getRows().size());
+
+        for (final Table table : result) {
+            assertEquals(12, table.query(Query.getAll()).size());
+        }
     }
 
     @Test

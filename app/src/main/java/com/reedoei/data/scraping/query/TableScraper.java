@@ -1,6 +1,8 @@
 package com.reedoei.data.scraping.query;
 
-import com.reedoei.data.scraping.Table;
+import android.support.annotation.NonNull;
+
+import com.reedoei.data.scraping.scraped.Table;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -12,7 +14,7 @@ import java.util.Set;
  * Created by roei on 2/24/18.
  */
 
-public class TableScraper extends Queryable {
+public class TableScraper implements Queryable {
     private final Document doc;
 
     public TableScraper(final Document doc) {
@@ -29,6 +31,7 @@ public class TableScraper extends Queryable {
         return result;
     }
 
+    @NonNull
     @Override
     public Set<Data> query(final Query query) {
         return new HashSet<>();

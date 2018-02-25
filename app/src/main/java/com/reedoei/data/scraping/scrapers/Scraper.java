@@ -1,5 +1,7 @@
 package com.reedoei.data.scraping.scrapers;
 
+import android.support.annotation.NonNull;
+
 import java.util.Set;
 
 /**
@@ -8,5 +10,7 @@ import java.util.Set;
 
 public interface Scraper<T> {
     double getScore(final String text);
+
+    @NonNull
     Set<T> scrapeData(final String text);
 }
