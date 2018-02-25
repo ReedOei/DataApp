@@ -9,16 +9,14 @@ import java.util.Set;
 
 public class Data<T> {
     private final DataType dataType;
-    private final String dataTypeStr;
     private final Set<T> dataValues;
 
     private final double score;
 
     private final String raw;
 
-    public Data(DataType dataType, String dataTypeStr, Set<T> dataValues, String raw, double score) {
+    public Data(DataType dataType, Set<T> dataValues, String raw, double score) {
         this.dataType = dataType;
-        this.dataTypeStr = dataTypeStr;
         this.dataValues = dataValues;
 
         this.raw = raw;

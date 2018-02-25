@@ -18,48 +18,10 @@ import java.util.Set;
 
 public class Query<T> {
     private final DataType dataType;
-    private final String dataTypeStr;
     private final AbstractScraper<T> scraper;
 
-    public static Query<String> any() {
-        return new Query<>(DataType.ANY, "", new AnyScraper(Collections.<String>emptyList()));
-    }
-
-    public static Query<Integer> age() {
-        return age(Collections.<String>emptyList());
-    }
-
-    public static Query<Integer> age(final List<String> keywords) {
-        return new Query<>(DataType.AGE, "age", new AgeScraper(keywords));
-    }
-
-    public static Query<Date> date() {
-        return date(Collections.<String>emptyList());
-    }
-
-    public static Query<Date> date(final List<String> keywords) {
-        return new Query<>(DataType.DATE, "date", new DateScraper(keywords));
-    }
-
-    public static Query<String> general(final String name) {
-        return general(name, Collections.<String>emptyList());
-    }
-
-    public static Query<String> general(final String name, final List<String> keywords) {
-        return new Query<>(DataType.GENERAL, "general", new GeneralScraper(name, keywords));
-    }
-
-    public static Query<String> phoneNumber() {
-        return phoneNumber(Collections.<String>emptyList());
-    }
-
-    public static Query<String> phoneNumber(final List<String> keywords) {
-        return new Query<>(DataType.PHONE_NUMBER, "phone-number", new PhoneNumberScraper(keywords));
-    }
-
-    public Query(DataType dataType, String dataTypeStr, AbstractScraper<T> scraper) {
+    public Query(DataType dataType, AbstractScraper<T> scraper) {
         this.dataType = dataType;
-        this.dataTypeStr = dataTypeStr;
         this.scraper = scraper;
     }
 
@@ -71,7 +33,7 @@ public class Query<T> {
         final Set<T> data = scraper.scrapeData(text);
         final double score = scraper.getScore(text);
 
-        return new Data<>(dataType, dataTypeStr, data, text, score);
+        return new Data<>(dataType, data, text, score);
     }
 
     public double getScore(final String text) {

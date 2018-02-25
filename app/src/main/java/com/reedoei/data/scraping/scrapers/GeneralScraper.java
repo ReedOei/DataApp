@@ -10,22 +10,13 @@ import java.util.Set;
  * Created by roei on 2/24/18.
  */
 public class GeneralScraper extends AbstractScraper<String> {
-    private final String name;
-
-    public GeneralScraper(final String name, final List<String> keywords) {
+    public GeneralScraper(final List<String> keywords) {
         super(keywords);
-        this.name = name.toLowerCase();
     }
 
     @Override
     public double getScore(final String text) {
-        double total = getKeywordScore(text);
-
-        if (text.toLowerCase().contains(name)) {
-            total += 1.0;
-        }
-
-        return total;
+        return getKeywordScore(text);
     }
 
     @NonNull

@@ -1,7 +1,7 @@
 package com.reedoei.data;
 
-import com.reedoei.data.scraping.query.Data;
 import com.reedoei.data.scraping.query.Query;
+import com.reedoei.data.scraping.query.QueryBuilder;
 import com.reedoei.data.scraping.scraped.Table;
 import com.reedoei.data.scraping.query.TableScraper;
 
@@ -9,6 +9,9 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.junit.Test;
 
+import java.time.LocalDate;
+import java.time.Month;
+import java.time.ZoneId;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Set;
@@ -66,7 +69,7 @@ public class TableScraperTest {
         assertEquals(1, result.size());
 
         for (final Table table : result) {
-            assertEquals(18, table.query(Query.any()).size());
+            assertEquals(18, table.query(QueryBuilder.any().build()).size());
         }
     }
 
@@ -80,7 +83,7 @@ public class TableScraperTest {
         assertEquals(1, result.size());
 
         for (final Table table : result) {
-            final Set<Integer> dataSet = table.handleQuery(Query.age()).asSet();
+            final Set<Integer> dataSet = table.handleQuery(QueryBuilder.age().build()).asSet();
 
             assertEquals(3, dataSet.size());
             assertThat(dataSet, hasItems(100, 36, 6));
@@ -97,7 +100,7 @@ public class TableScraperTest {
         assertEquals(1, result.size());
 
         for (final Table table : result) {
-            final Set<Date> dataSet = table.handleQuery(Query.date()).asSet();
+            final Set<Date> dataSet = table.handleQuery(QueryBuilder.date().build()).asSet();
 
             assertEquals(3, dataSet.size());
         }
@@ -113,7 +116,7 @@ public class TableScraperTest {
         assertEquals(1, result.size());
 
         for (final Table table : result) {
-            final Set<String> dataSet = table.handleQuery(Query.general("food")).asSet();
+            final Set<String> dataSet = table.handleQuery(QueryBuilder.general().keyword("food").build()).asSet();
 
             assertEquals(3, dataSet.size());
             assertThat(dataSet, hasItems("Steak", "Apples", "Pie"));
@@ -130,7 +133,7 @@ public class TableScraperTest {
         assertEquals(1, result.size());
 
         for (final Table table : result) {
-            final Set<String> dataSet = table.handleQuery(Query.phoneNumber()).asSet();
+            final Set<String> dataSet = table.handleQuery(QueryBuilder.phoneNumber().build()).asSet();
 
             assertEquals(3, dataSet.size());
             assertThat(dataSet, hasItems("269-456-7890", "123-456-7890", "183-456-7890"));
@@ -147,7 +150,7 @@ public class TableScraperTest {
         assertEquals(1, result.size());
 
         for (final Table table : result) {
-            final Set<Date> dataSet = table.handleQuery(Query.date(Collections.singletonList("birth"))).asSet();
+            final Set<Date> dataSet = table.handleQuery(QueryBuilder.date().keyword("birth").build()).asSet();
 
             assertEquals(3, dataSet.size());
         }
@@ -158,6 +161,20 @@ public class TableScraperTest {
         final Document doc = Jsoup.connect("https://en.wikipedia.org/wiki/List_of_presidents_of_the_United_States_by_age").get();
 
         final TableScraper scraper = new TableScraper(doc);
-        final Set<Date> dataSet = scraper.handleQuery(Query.date(Collections.singletonList("birth"))).asSet();
+        final Set<Date> dataSet = scraper.handleQuery(QueryBuilder.date().keyword("birth").build()).asSet();
+
+        boolean found = false;
+        for (final Date date : dataSet) {
+            LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+            // Check that at least jimmy carter's birthday is on the list.
+            if (localDate.getMonth().equals(Month.OCTOBER) &&
+                    localDate.getDayOfMonth() == 1 &&
+                    localDate.getYear() == 1924) {
+                found = true;
+            }
+        }
+
+        assertTrue(found);
     }
 }
