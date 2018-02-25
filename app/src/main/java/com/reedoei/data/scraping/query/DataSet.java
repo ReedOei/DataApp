@@ -27,6 +27,16 @@ public class DataSet<T> implements Iterable<Data<T>>  {
         this.data = data;
     }
 
+    public String toCSV() {
+        final StringBuilder csv = new StringBuilder();
+
+        for (final Data<T> d : data) {
+            csv.append(d.toCSV());
+        }
+
+        return csv.toString();
+    }
+
     public double getScore() {
         return score;
     }

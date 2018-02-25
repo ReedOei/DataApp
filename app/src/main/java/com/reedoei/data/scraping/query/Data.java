@@ -1,5 +1,7 @@
 package com.reedoei.data.scraping.query;
 
+import org.apache.commons.math3.util.Pair;
+
 import java.util.List;
 
 /**
@@ -25,5 +27,23 @@ public class Data<T> {
 
     public List<T> getDataValues() {
         return dataValues;
+    }
+
+    public String toCSV() {
+        String result = "";
+
+        for (final T value : dataValues) {
+            result += getCSV(value);
+        }
+
+        return result;
+    }
+
+    private String getCSV(T value) {
+        if (value instanceof Pair) {
+            return ((Pair) value).getKey() + "," + ((Pair) value).getValue() + System.lineSeparator();
+        } else {
+            return value.toString() + System.lineSeparator();
+        }
     }
 }
