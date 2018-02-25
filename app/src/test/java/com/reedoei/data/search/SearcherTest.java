@@ -1,11 +1,8 @@
 package com.reedoei.data.search;
 
-import com.reedoei.data.scraping.query.DataSet;
 import com.reedoei.data.scraping.query.InvalidQueryException;
-import com.reedoei.data.scraping.query.Query;
 import com.reedoei.data.scraping.query.QueryBuilder;
 
-import org.apache.commons.math3.util.Pair;
 import org.jsoup.nodes.Document;
 import org.junit.Test;
 

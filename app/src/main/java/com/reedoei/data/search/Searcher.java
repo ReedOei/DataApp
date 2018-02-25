@@ -3,7 +3,7 @@ package com.reedoei.data.search;
 import android.support.annotation.NonNull;
 
 import com.google.common.collect.Lists;
-import com.reedoei.data.scraping.query.DataSet;
+import com.reedoei.data.data.DataSet;
 import com.reedoei.data.scraping.query.DocumentScraper;
 import com.reedoei.data.scraping.query.InvalidQueryException;
 import com.reedoei.data.scraping.query.Query;

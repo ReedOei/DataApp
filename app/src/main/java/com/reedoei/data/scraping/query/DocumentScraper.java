@@ -2,6 +2,8 @@ package com.reedoei.data.scraping.query;
 
 import android.support.annotation.NonNull;
 
+import com.reedoei.data.data.DataSet;
+
 import org.apache.commons.math3.util.Pair;
 import org.jsoup.nodes.Document;
 

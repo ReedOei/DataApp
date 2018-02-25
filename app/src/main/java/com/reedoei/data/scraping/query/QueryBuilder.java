@@ -3,6 +3,7 @@ package com.reedoei.data.scraping.query;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 
+import com.reedoei.data.data.DataType;
 import com.reedoei.data.scraping.scrapers.AbstractScraper;
 import com.reedoei.data.scraping.scrapers.AgeScraper;
 import com.reedoei.data.scraping.scrapers.AnyScraper;

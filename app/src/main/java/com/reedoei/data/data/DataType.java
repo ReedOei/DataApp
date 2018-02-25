@@ -1,4 +1,4 @@
-package com.reedoei.data.scraping.query;
+package com.reedoei.data.data;
 
 /**
  * Created by roei on 2/24/18.
@@ -6,7 +6,6 @@ package com.reedoei.data.scraping.query;
 
 public enum DataType {
     AGE,
-    MASS,
     ANY,
     DATE,
     PHONE_NUMBER,

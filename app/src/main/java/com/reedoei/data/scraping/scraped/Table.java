@@ -2,8 +2,8 @@ package com.reedoei.data.scraping.scraped;
 
 import android.support.annotation.NonNull;
 
-import com.reedoei.data.scraping.query.DataSet;
-import com.reedoei.data.scraping.query.DataType;
+import com.reedoei.data.data.DataSet;
+import com.reedoei.data.data.DataType;
 import com.reedoei.data.scraping.query.InvalidQueryException;
 import com.reedoei.data.scraping.query.Query;
 import com.reedoei.data.scraping.query.Queryable;
@@ -13,7 +13,6 @@ import org.jsoup.nodes.Element;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.zip.ZipFile;
 
 /**
  * Created by roei on 2/24/18.

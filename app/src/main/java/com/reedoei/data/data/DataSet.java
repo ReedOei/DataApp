@@ -1,22 +1,59 @@
-package com.reedoei.data.scraping.query;
+package com.reedoei.data.data;
 
 import android.support.annotation.NonNull;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+
 import org.apache.commons.math3.util.Pair;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Function;
 
 /**
  * Created by roei on 2/24/18.
  */
-
 public class DataSet<T> implements Iterable<Data<T>>  {
     public static <T> DataSet<T> empty() {
         return new DataSet<>(0, new ArrayList<>());
+    }
+
+    public static <T> DataSet<T> load(final String json,
+                                      final Function<String, T> parser) {
+        Gson gson = new Gson();
+        return loadWrapper(gson.fromJson(json, DataSetWrapper.class), parser);
+    }
+
+    public static <K, V> DataSet<Pair<K,V>> load(final String json,
+                                                 final Function<String, K> keyParser,
+                                                 final Function<String, V> valueParser) {
+        Gson gson = new Gson();
+
+        Function<String, Pair<K, V>> parser = str -> {
+            final String[] split = str.split(",");
+            return new Pair<K, V>(keyParser.apply(split[0]), valueParser.apply(split[1]));
+        };
+
+        return loadWrapper(gson.fromJson(json, DataSetWrapper.class), parser);
+    }
+
+    static <T> DataSet<T> loadWrapper(final DataSetWrapper wrapper,
+                                      final Function<String, T> parser) {
+        final List<Data<T>> values = new ArrayList<>();
+
+        for (DataWrapper data : wrapper.dataValues) {
+            values.add(Data.loadWrapper(data, parser));
+        }
+
+        return new DataSet<>(wrapper.score, values);
     }
 
     private double score;
@@ -25,16 +62,6 @@ public class DataSet<T> implements Iterable<Data<T>>  {
     public DataSet(double score, List<Data<T>> data) {
         this.score = score;
         this.data = data;
-    }
-
-    public String toCSV() {
-        final StringBuilder csv = new StringBuilder();
-
-        for (final Data<T> d : data) {
-            csv.append(d.toCSV());
-        }
-
-        return csv.toString();
     }
 
     public double getScore() {
@@ -51,6 +78,26 @@ public class DataSet<T> implements Iterable<Data<T>>  {
         }
 
         return this;
+    }
+
+    public JSONObject getJSON() {
+        JSONObject object = new JSONObject();
+
+        object.put("score", Double.toString(score));
+
+        JSONArray dataValues = new JSONArray();
+
+        for (final Data<T> d : data) {
+            dataValues.add(d.getJSON());
+        }
+
+        object.put("dataValues", dataValues);
+
+        return object;
+    }
+
+    public String toJSON() {
+        return getJSON().toJSONString();
     }
 
     public boolean isEmpty() {

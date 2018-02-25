@@ -1,5 +1,7 @@
 package com.reedoei.data.scraping.query;
 
+import com.reedoei.data.data.Data;
+import com.reedoei.data.data.DataType;
 import com.reedoei.data.scraping.scrapers.AbstractScraper;
 
 import java.util.List;
