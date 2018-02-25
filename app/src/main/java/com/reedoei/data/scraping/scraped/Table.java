@@ -13,6 +13,7 @@ import org.jsoup.nodes.Element;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.zip.ZipFile;
 
 /**
  * Created by roei on 2/24/18.
@@ -147,5 +148,9 @@ public class Table extends AbstractScraped implements Queryable {
         }
 
         return new TableRow(this, cells);
+    }
+
+    public List<TableRow> getRows() {
+        return dataRows;
     }
 }

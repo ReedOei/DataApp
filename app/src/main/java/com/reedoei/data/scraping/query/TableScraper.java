@@ -8,8 +8,8 @@ import org.apache.commons.math3.util.Pair;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by roei on 2/24/18.
@@ -18,24 +18,31 @@ import java.util.Set;
 public class TableScraper implements Queryable {
     private final Document doc;
 
+    private final List<Table> tables = new ArrayList<>();
+
     public TableScraper(final Document doc) {
         this.doc = doc;
     }
 
-    public final Set<Table> scrape() {
-        final Set<Table> result = new HashSet<>();
-
-        for (final Element element : doc.getElementsByTag("table")) {
-            result.add(new Table(element));
+    public final List<Table> scrape() {
+        if (!tables.isEmpty()) {
+            return tables;
         }
 
-        return result;
+        for (final Element element : doc.getElementsByTag("table")) {
+            tables.add(new Table(element));
+        }
+
+        return tables;
     }
 
     @NonNull
     @Override
     public <T> DataSet<T> handleQuery(Query<T> query) {
         DataSet<T> dataSet = DataSet.empty();
+
+        System.out.println("Querying " + scrape().size() + " tables with " +
+                scrape().stream().map(t -> t.getRows().size()).mapToInt(Integer::intValue).sum() + " rows.");
 
         for (final Table table : scrape()) {
             final DataSet<T> tempDataSet = table.handleQuery(query);

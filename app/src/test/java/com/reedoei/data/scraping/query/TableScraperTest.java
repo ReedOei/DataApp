@@ -11,6 +11,7 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 import static org.junit.Assert.*;
@@ -61,7 +62,7 @@ public class TableScraperTest {
         final Document doc = Jsoup.parse(testSimpleTable);
 
         final TableScraper scraper = new TableScraper(doc);
-        final Set<Table> result = scraper.scrape();
+        final List<Table> result = scraper.scrape();
 
         assertEquals(1, result.size());
 
@@ -75,7 +76,7 @@ public class TableScraperTest {
         final Document doc = Jsoup.parse(testSimpleTable);
 
         final TableScraper scraper = new TableScraper(doc);
-        final Set<Table> result = scraper.scrape();
+        final List<Table> result = scraper.scrape();
 
         assertEquals(1, result.size());
 
@@ -92,7 +93,7 @@ public class TableScraperTest {
         final Document doc = Jsoup.parse(testSimpleTable);
 
         final TableScraper scraper = new TableScraper(doc);
-        final Set<Table> result = scraper.scrape();
+        final List<Table> result = scraper.scrape();
 
         assertEquals(1, result.size());
 
@@ -108,7 +109,7 @@ public class TableScraperTest {
         final Document doc = Jsoup.parse(testSimpleTable);
 
         final TableScraper scraper = new TableScraper(doc);
-        final Set<Table> result = scraper.scrape();
+        final List<Table> result = scraper.scrape();
 
         assertEquals(1, result.size());
 
@@ -125,7 +126,7 @@ public class TableScraperTest {
         final Document doc = Jsoup.parse(testSimpleTable);
 
         final TableScraper scraper = new TableScraper(doc);
-        final Set<Table> result = scraper.scrape();
+        final List<Table> result = scraper.scrape();
 
         assertEquals(1, result.size());
 
@@ -142,7 +143,7 @@ public class TableScraperTest {
         final Document doc = Jsoup.parse(testSimpleTable);
 
         final TableScraper scraper = new TableScraper(doc);
-        final Set<Table> result = scraper.scrape();
+        final List<Table> result = scraper.scrape();
 
         assertEquals(1, result.size());
 
@@ -158,7 +159,7 @@ public class TableScraperTest {
         final Document doc = Jsoup.parse(testSimpleTable);
 
         final TableScraper scraper = new TableScraper(doc);
-        final Set<Table> result = scraper.scrape();
+        final List<Table> result = scraper.scrape();
 
         assertEquals(1, result.size());
 
