@@ -3,6 +3,7 @@ package com.reedoei.data.scraping.scraped;
 import android.support.annotation.NonNull;
 
 import com.reedoei.data.scraping.query.Data;
+import com.reedoei.data.scraping.query.DataSet;
 import com.reedoei.data.scraping.query.Query;
 import com.reedoei.data.scraping.query.Queryable;
 
@@ -30,6 +31,19 @@ class TableCell extends AbstractScraped implements Queryable {
     @Override
     public <T> Set<Data<T>> query(final Query<T> query) {
         return Collections.singleton(query.scrape(text));
+    }
+
+    @Override
+    public <T> double getScore(Query<T> query) {
+        return row.getTable().getScore(query);
+    }
+
+    @NonNull
+    @Override
+    public <T> DataSet<T> handleQuery(Query<T> query) {
+        final double score = row.getTable().getScore(query);
+
+        return new DataSet<>(score, Collections.singleton(query.scrape(text)));
     }
 
     public String getText() {

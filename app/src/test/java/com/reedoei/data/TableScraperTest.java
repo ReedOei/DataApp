@@ -66,7 +66,7 @@ public class TableScraperTest {
         assertEquals(1, result.size());
 
         for (final Table table : result) {
-            assertEquals(15, table.query(Query.any()).size());
+            assertEquals(18, table.query(Query.any()).size());
         }
     }
 
@@ -80,7 +80,7 @@ public class TableScraperTest {
         assertEquals(1, result.size());
 
         for (final Table table : result) {
-            final Set<Integer> dataSet = Data.collapseDataset(table.query(Query.age()));
+            final Set<Integer> dataSet = table.handleQuery(Query.age()).asSet();
 
             assertEquals(3, dataSet.size());
             assertThat(dataSet, hasItems(100, 36, 6));
@@ -97,7 +97,7 @@ public class TableScraperTest {
         assertEquals(1, result.size());
 
         for (final Table table : result) {
-            final Set<Date> dataSet = Data.collapseDataset(table.query(Query.date()));
+            final Set<Date> dataSet = table.handleQuery(Query.date()).asSet();
 
             assertEquals(3, dataSet.size());
         }
@@ -113,7 +113,7 @@ public class TableScraperTest {
         assertEquals(1, result.size());
 
         for (final Table table : result) {
-            final Set<String> dataSet = Data.collapseDataset(table.query(Query.general("food")));
+            final Set<String> dataSet = table.handleQuery(Query.general("food")).asSet();
 
             assertEquals(3, dataSet.size());
             assertThat(dataSet, hasItems("Steak", "Apples", "Pie"));
@@ -130,7 +130,7 @@ public class TableScraperTest {
         assertEquals(1, result.size());
 
         for (final Table table : result) {
-            final Set<String> dataSet = Data.collapseDataset(table.query(Query.phoneNumber()));
+            final Set<String> dataSet = table.handleQuery(Query.phoneNumber()).asSet();
 
             assertEquals(3, dataSet.size());
             assertThat(dataSet, hasItems("269-456-7890", "123-456-7890", "183-456-7890"));
@@ -147,7 +147,7 @@ public class TableScraperTest {
         assertEquals(1, result.size());
 
         for (final Table table : result) {
-            final Set<Date> dataSet = Data.collapseDataset(table.query(Query.date(Collections.singletonList("birth"))));
+            final Set<Date> dataSet = table.handleQuery(Query.date(Collections.singletonList("birth"))).asSet();
 
             assertEquals(3, dataSet.size());
         }
@@ -158,6 +158,6 @@ public class TableScraperTest {
         final Document doc = Jsoup.connect("https://en.wikipedia.org/wiki/List_of_presidents_of_the_United_States_by_age").get();
 
         final TableScraper scraper = new TableScraper(doc);
-        final Set<Date> dataSet = Data.collapseDataset(scraper.query(Query.date()));
+        final Set<Date> dataSet = scraper.handleQuery(Query.date(Collections.singletonList("birth"))).asSet();
     }
 }

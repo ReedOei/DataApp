@@ -2,17 +2,16 @@ package com.reedoei.data.scraping.scraped;
 
 import android.support.annotation.NonNull;
 
-import com.reedoei.data.scraping.query.Data;
+import com.reedoei.data.scraping.query.DataSet;
 import com.reedoei.data.scraping.query.DataType;
 import com.reedoei.data.scraping.query.Query;
 import com.reedoei.data.scraping.query.Queryable;
 
+import org.apache.commons.math3.util.Pair;
 import org.jsoup.nodes.Element;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by roei on 2/24/18.
@@ -46,27 +45,33 @@ public class Table extends AbstractScraped implements Queryable {
 
     @NonNull
     @Override
-    public <T> Set<Data<T>> query(final Query<T> query) {
+    public <T> DataSet<T> handleQuery(Query<T> query) {
         if (query.getDataType().equals(DataType.ANY)) {
-            final Set<Data<T>> result = new HashSet<>();
+            final DataSet<T> result = DataSet.empty();
 
             for (final TableRow row : dataRows) {
-                result.addAll(row.query(query));
+                result.combine(row.handleQuery(query));
             }
 
             return result;
         } else {
-            final TableRow bestRow = findBestRow(query);
+            final Pair<Double, TableRow> bestRow = findBestRow(query);
 
-            if (bestRow == null) {
-                return new HashSet<>();
+            if (bestRow.getValue() == null) {
+                return DataSet.empty();
             } else {
-                return bestRow.query(query);
+                return bestRow.getValue().handleQuery(query);
             }
         }
     }
 
-    private <T> TableRow findBestRow(final Query<T> query) {
+    // Override because this gets called in TableRow and TableCell, so would be infinite loop.
+    @Override
+    public <T> double getScore(Query<T> query) {
+        return findBestRow(query).getKey();
+    }
+
+    private <T> Pair<Double, TableRow> findBestRow(final Query<T> query) {
         TableRow bestRow = null;
         double maxScore = 0; // 0 is the min, all scores should be positive.
 
@@ -99,7 +104,7 @@ public class Table extends AbstractScraped implements Queryable {
             }
         }
 
-        return bestRow;
+        return new Pair<>(maxScore, bestRow);
     }
 
     public TableRow getColumn(int index) {

@@ -26,13 +26,7 @@ public class Data<T> {
         this.score = score;
     }
 
-    public static <T> Set<T> collapseDataset(final Set<Data<T>> dataSet) {
-        final Set<T> result = new HashSet<>();
-
-        for (final Data<T> data : dataSet) {
-            result.addAll(data.dataValues);
-        }
-
-        return result;
+    public Set<T> getDataValues() {
+        return dataValues;
     }
 }

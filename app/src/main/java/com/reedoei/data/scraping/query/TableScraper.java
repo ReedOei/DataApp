@@ -1,6 +1,7 @@
 package com.reedoei.data.scraping.query;
 
 import android.support.annotation.NonNull;
+import android.util.Pair;
 
 import com.reedoei.data.scraping.scraped.Table;
 
@@ -32,14 +33,22 @@ public class TableScraper implements Queryable {
     }
 
     @NonNull
-    @Override
-    public <T> Set<Data<T>> query(final Query<T> query) {
-        final Set<Data<T>> dataSet = new HashSet<>();
+    public <T> DataSet<T> handleQuery(Query<T> query) {
+        Set<Data<T>> dataSet = new HashSet<>();
 
+        double maxScore = 0;
+
+        // Return the data set with the highest score;
         for (final Table table : scrape()) {
-            dataSet.addAll(table.query(query));
+            final Set<Data<T>> tempDataSet = table.query(query);
+            double score = table.getScore(query);
+
+            if (score > maxScore) {
+                maxScore = score;
+                dataSet = tempDataSet;
+            }
         }
 
-        return dataSet;
+        return new DataSet<>(maxScore, dataSet);
     }
 }
