@@ -12,7 +12,7 @@ public abstract class AbstractScraped {
     @Nullable
     private final Element element;
 
-    public AbstractScraped(final Element element) {
+    public AbstractScraped(@Nullable final Element element) {
         this.element = element;
     }
 }

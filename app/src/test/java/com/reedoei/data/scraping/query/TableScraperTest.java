@@ -1,9 +1,6 @@
-package com.reedoei.data;
+package com.reedoei.data.scraping.query;
 
-import com.reedoei.data.scraping.query.Query;
-import com.reedoei.data.scraping.query.QueryBuilder;
 import com.reedoei.data.scraping.scraped.Table;
-import com.reedoei.data.scraping.query.TableScraper;
 
 import org.apache.commons.math3.util.Pair;
 import org.jsoup.Jsoup;
